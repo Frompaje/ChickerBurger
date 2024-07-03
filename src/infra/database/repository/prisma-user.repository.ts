@@ -1,6 +1,12 @@
-import { UserCreateInput, UserFindIdInput, UserFindInput, UserRepository } from "@/features/user/repository/user.repository";
-import { Injectable } from "@nestjs/common";
-import { PrismaService } from "../database.service";
+import {
+  UserCreateInput,
+  UserFindIdInput,
+  UserFindInput,
+  UserRepository,
+  UserUpdatedPasswordInput,
+} from '@/features/user/repository/user.repository';
+import { Injectable } from '@nestjs/common';
+import { PrismaService } from '../database.service';
 
 @Injectable()
 export class PrismaUserRepository implements UserRepository {
@@ -37,6 +43,17 @@ export class PrismaUserRepository implements UserRepository {
     return this.prisma.user.findFirst({
       where: {
         id,
+      },
+    });
+  }
+
+  updatedPassword({ id, password }: UserUpdatedPasswordInput) {
+    return this.prisma.user.update({
+      where: {
+        id,
+      },
+      data: {
+        password,
       },
     });
   }

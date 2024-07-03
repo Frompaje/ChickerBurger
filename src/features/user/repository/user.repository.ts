@@ -1,4 +1,4 @@
-import { User } from "../entities/user.entity";
+import { User } from '../entities/user.entity';
 
 export abstract class UserRepository {
   abstract create({
@@ -10,6 +10,10 @@ export abstract class UserRepository {
   abstract findByEmail({ email }: UserFindInput): Promise<User | null>;
   abstract findById({ id }: UserFindIdInput): Promise<User | null>;
   abstract delete({ id }: UserFindIdInput): Promise<User>;
+  abstract updatedPassword({
+    id,
+    password,
+  }: UserUpdatedPasswordInput): Promise<User>;
 }
 
 export type UserCreateInput = {
@@ -17,6 +21,11 @@ export type UserCreateInput = {
   password: string;
   email: string;
   address: string;
+};
+
+export type UserUpdatedPasswordInput = {
+  id: string;
+  password: string;
 };
 
 export type UserFindInput = {

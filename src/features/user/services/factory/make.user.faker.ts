@@ -1,7 +1,7 @@
+import { randomUUID } from 'crypto';
+import { hashSync } from 'bcryptjs';
 import { faker } from '@faker-js/faker';
 import type { User } from '@prisma/client';
-import { hashSync } from 'bcryptjs';
-import { randomUUID } from 'crypto';
 
 export class UserMock {
   public static create(override?: Partial<User>): User {

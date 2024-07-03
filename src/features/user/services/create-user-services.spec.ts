@@ -2,20 +2,19 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals';
 import { ConflictException } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { BcryptoRepository } from '../../../infra/crypto/bcrypto.repository';
-import { User } from '../entities/user.entity';
 import { UserRepository } from '../repository/user.repository';
-import { CreateUserService } from './create-user.service';
+import { UserService } from './user.service';
 import { UserMock } from './factory/make.user.faker';
 
 describe('[Service Create] Should create a user', () => {
   let userRepository: UserRepository;
   let bcrypt: BcryptoRepository;
-  let userService: CreateUserService;
+  let userService: UserService;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       providers: [
-        CreateUserService,
+        UserService,
         {
           provide: UserRepository,
           useValue: {
@@ -35,7 +34,7 @@ describe('[Service Create] Should create a user', () => {
 
     userRepository = module.get(UserRepository);
     bcrypt = module.get(BcryptoRepository);
-    userService = module.get(CreateUserService);
+    userService = module.get(UserService);
   });
 
   describe('[Success]', () => {
@@ -45,7 +44,7 @@ describe('[Service Create] Should create a user', () => {
         .spyOn(userRepository, 'create')
         .mockResolvedValue(userMock);
 
-      const { user } = await userService.execute(userMock);
+      const { user } = await userService.create(userMock);
       expect(userRepositorySpy).toBeCalledTimes(1);
       expect(user.name).toEqual('Yan Edwards');
     });
@@ -55,7 +54,7 @@ describe('[Service Create] Should create a user', () => {
 
       jest.spyOn(bcrypt, 'hash').mockResolvedValue('hashed-password');
 
-      await userService.execute(userMock);
+      await userService.create(userMock);
 
       const mockPrismaAdapter = jest
         .spyOn(userRepository, 'create')
@@ -77,7 +76,7 @@ describe('[Service Create] Should create a user', () => {
       jest.spyOn(userRepository, 'findByEmail').mockResolvedValue(userMock);
 
       await expect(() => {
-        return userService.execute(userMock);
+        return userService.create(userMock);
       }).rejects.toBeInstanceOf(ConflictException);
     });
   });

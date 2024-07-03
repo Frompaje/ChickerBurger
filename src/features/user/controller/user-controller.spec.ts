@@ -1,21 +1,21 @@
 import { Test } from '@nestjs/testing';
 
-import { CreateUserService } from '../services/create-user.service';
 import { UserController } from './user.controller';
 import { BcryptoRepository } from '@/infra/crypto/bcrypto.repository';
 import { UserRepository } from '../repository/user.repository';
+import { UserService } from '../services/user.service';
 import { UserMock } from '../services/factory/make.user.faker';
 
 describe('User Controller', () => {
   let userController: UserController;
-  let userServices: CreateUserService;
+  let userServices: UserService;
   let bcrypt: BcryptoRepository;
 
   beforeEach(async () => {
     const module = await Test.createTestingModule({
       controllers: [UserController],
       providers: [
-        CreateUserService,
+        UserService,
         {
           provide: UserRepository,
           useValue: {
@@ -34,7 +34,7 @@ describe('User Controller', () => {
     }).compile();
 
     userController = module.get<UserController>(UserController);
-    userServices = module.get<CreateUserService>(CreateUserService);
+    userServices = module.get<UserService>(UserService);
     bcrypt = module.get<BcryptoRepository>(BcryptoRepository);
   });
 
@@ -42,7 +42,7 @@ describe('User Controller', () => {
     const result = { user: UserMock.create() };
 
     jest
-      .spyOn(userServices, 'execute')
+      .spyOn(userServices, 'create')
       .mockImplementation(() => Promise.resolve(result));
     expect(
       await userController.create({

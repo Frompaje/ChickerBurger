@@ -25,6 +25,7 @@ describe('User Controller', () => {
     authController = module.get<LoginController>(LoginController);
     authService = module.get<AuthService>(AuthService);
   });
+
   describe('[POST]/auth/login', () => {
     describe('Success', () => {
       it('should return a token for valid credentials', async () => {
