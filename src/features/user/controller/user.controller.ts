@@ -1,8 +1,9 @@
-import { Body, Controller, HttpCode, Post } from '@nestjs/common';
+import { Body, Controller, HttpCode, Post, UseGuards } from '@nestjs/common';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { Roles } from '../decorator/role.decorator';
 import { Role } from '../decorator/role.enum';
 import { UserService } from '../services/user.service';
+import { UpdatedPasswordUserDto } from '../dto/update-user.dto';
 
 @Controller('user')
 export class UserController {
@@ -19,6 +20,17 @@ export class UserController {
       password,
       email,
       address,
+    });
+  }
+  @Post()
+  @Roles(Role.User)
+  @UseGuards()
+  async updatedPassword(@Body() body: UpdatedPasswordUserDto) {
+    const { id, password } = body;
+
+    return await this.userService.updatedPassword({
+      id,
+      password,
     });
   }
 }

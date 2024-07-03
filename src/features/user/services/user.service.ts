@@ -1,12 +1,10 @@
 import {
-  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { BcryptoRepository } from '../../../infra/crypto/bcrypto.repository';
 
-import type { User } from '../entities/user.entity';
 import {
   UserCreateInput,
   UserRepository,
